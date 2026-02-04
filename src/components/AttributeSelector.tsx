@@ -62,10 +62,19 @@ export default function AttributeSelector({ productCode, onSelectionsChange }: A
     })
   }, [attributes, attributeValues])
 
-  // Notify parent of selection changes
+  // Notify parent of selection changes (sorted by attribute ord)
   useEffect(() => {
-    onSelectionsChange?.(selections)
-  }, [selections, onSelectionsChange])
+    // Sort selections by BK_Attribute ord
+    const sortedSelections = Object.entries(selections)
+      .sort(([aCode], [bCode]) => {
+        const aOrd = attributes.find(a => a.attributeCode === aCode)?.ord ?? Infinity
+        const bOrd = attributes.find(a => a.attributeCode === bCode)?.ord ?? Infinity
+        return aOrd - bOrd
+      })
+      .reduce((acc, [code, value]) => ({ ...acc, [code]: value }), {})
+
+    onSelectionsChange?.(sortedSelections)
+  }, [selections, attributes, onSelectionsChange])
 
   const handleSelectionChange = (attributeCode: string, value: string) => {
     const values = attributeValues[attributeCode] || []
