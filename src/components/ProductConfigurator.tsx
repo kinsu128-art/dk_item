@@ -63,12 +63,25 @@ export default function ProductConfigurator({ productCode, endNum }: ProductConf
 
   // Generate product code (material at the end, then A without hyphen)
   const generatedCode = basicSelectionsComplete
-    ? [
-        productCode,
-        ...endSelections.map(s => s.degignator),
-        ...selectedAttributeMarks,
-        selectedMaterial.MaterialGroup_cd + 'A'
-      ].join('-')
+    ? (() => {
+        // Get all end designators
+        const designators = endSelections.map(s => s.degignator)
+
+        // Check if all end designators are the same
+        const allSame = designators.every(d => d === designators[0])
+
+        // If all same, show as [designator]x[count], otherwise show all
+        const endPart = allSame
+          ? `${designators[0]}x${designators.length}`
+          : designators.join('-')
+
+        return [
+          productCode,
+          endPart,
+          ...selectedAttributeMarks,
+          selectedMaterial.MaterialGroup_cd + 'A'
+        ].join('-')
+      })()
     : null
 
   return (
