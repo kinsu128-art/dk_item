@@ -5,12 +5,14 @@ import { useState, useEffect } from 'react'
 interface Attribute {
   attributeCode: string
   attributeName: string
+  ord: number
 }
 
 interface AttributeValue {
   attributeSubCode: string
   attributeSubName: string
   mark: string
+  ord: number
 }
 
 interface AttributeSelectorProps {

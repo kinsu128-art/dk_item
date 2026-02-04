@@ -18,6 +18,7 @@ interface AttributeValue {
   attributeSubCode: string
   attributeSubName: string
   mark: string
+  ord: number
 }
 
 interface ProductConfiguratorProps {
@@ -55,9 +56,10 @@ export default function ProductConfigurator({ productCode, endNum }: ProductConf
   // Check if basic selections are complete (material + all end connections)
   const basicSelectionsComplete = selectedMaterial && endSelections.every(s => s.degignator !== null)
 
-  // Get selected attribute marks (exclude NIL values)
+  // Get selected attribute marks sorted by ord (exclude NIL values)
   const selectedAttributeMarks = Object.values(attributeSelections)
     .filter((v): v is AttributeValue => v !== null)
+    .sort((a, b) => a.ord - b.ord)  // Sort by ord column
     .map(v => v.mark)
     .filter(mark => mark && mark.trim() !== '' && mark.toUpperCase() !== 'NIL')
 
