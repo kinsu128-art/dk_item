@@ -70,9 +70,9 @@ export default function ProductConfigurator({ productCode, endNum }: ProductConf
         // Check if all end designators are the same
         const allSame = designators.every(d => d === designators[0])
 
-        // If all same, show as [designator]x[count], otherwise show all
+        // If all same, show only once; otherwise show all
         const endPart = allSame
-          ? `${designators[0]}x${designators.length}`
+          ? designators[0]
           : designators.join('-')
 
         return [
