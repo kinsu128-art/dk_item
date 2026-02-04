@@ -69,13 +69,8 @@ export default function ProductConfigurator({ productCode, endNum }: ProductConf
         // Get all end designators
         const designators = endSelections.map(s => s.degignator)
 
-        // Check if all end designators are the same
-        const allSame = designators.every(d => d === designators[0])
-
-        // If all same, show as [designator]x[count]; otherwise show all
-        const endPart = allSame
-          ? `${designators[0]}x${designators.length}`
-          : designators.join('-')
+        // Show all end designators
+        const endPart = designators.join('-')
 
         return [
           productCode,
