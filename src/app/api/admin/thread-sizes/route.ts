@@ -53,22 +53,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get max threadSizeCode
-    const maxResult = await query<{ maxCode: number }>('SELECT MAX(threadSizeCode) as maxCode FROM A_ThreadSize')
-    const newCode = (maxResult[0]?.maxCode || 0) + 1
-
     await query(`
-      INSERT INTO A_ThreadSize (threadSizeCode, threadSpecCode, threadSizeName, degignator, threadSizeOrd)
-      VALUES (@threadSizeCode, @threadSpecCode, @threadSizeName, @degignator, @threadSizeOrd)
+      INSERT INTO A_ThreadSize (threadSpecCode, threadSizeName, degignator, threadSizeOrd)
+      VALUES (@threadSpecCode, @threadSizeName, @degignator, @threadSizeOrd)
     `, {
-      threadSizeCode: newCode,
       threadSpecCode: parseInt(threadSpecCode),
       threadSizeName,
       degignator: degignator || '',
       threadSizeOrd: threadSizeOrd || 0
     })
 
-    return NextResponse.json({ success: true, threadSizeCode: newCode })
+    return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Database error:', error)
     return NextResponse.json(

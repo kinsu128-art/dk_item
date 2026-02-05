@@ -51,21 +51,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get max threadTypeCode
-    const maxResult = await query<{ maxCode: number }>('SELECT MAX(threadTypeCode) as maxCode FROM A_ThreadType')
-    const newCode = (maxResult[0]?.maxCode || 0) + 1
-
     await query(`
-      INSERT INTO A_ThreadType (threadTypeCode, connectionTypeCode, threadTypeName, threadTypeOrd)
-      VALUES (@threadTypeCode, @connectionTypeCode, @threadTypeName, @threadTypeOrd)
+      INSERT INTO A_ThreadType (connectionTypeCode, threadTypeName, threadTypeOrd)
+      VALUES (@connectionTypeCode, @threadTypeName, @threadTypeOrd)
     `, {
-      threadTypeCode: newCode,
       connectionTypeCode: parseInt(connectionTypeCode),
       threadTypeName,
       threadTypeOrd: threadTypeOrd || 0
     })
 
-    return NextResponse.json({ success: true, threadTypeCode: newCode })
+    return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Database error:', error)
     return NextResponse.json(
