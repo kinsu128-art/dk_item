@@ -9,6 +9,12 @@ export default function HeaderNav() {
 
   const isActive = (path: string) => pathname === path
 
+  const navItems = [
+    { href: '/search', label: '코드 찾기' },
+    { href: '/decoder', label: '코드 디코더' },
+    { href: '/admin/thread-types', label: '코드관리' },
+  ]
+
   return (
     <header className="bg-dklok-blue text-white py-4 shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 flex items-center justify-between">
@@ -22,38 +28,21 @@ export default function HeaderNav() {
             priority
           />
         </Link>
-        <div className="flex items-center gap-6 pointer-events-auto">
-          <span className="text-lg font-bold text-white hidden sm:block">Product Catalog</span>
-          <Link
-            href="/search"
-            className={`text-sm py-2 px-1 transition-colors hidden sm:block cursor-pointer pointer-events-auto ${
-              isActive('/search')
-                ? 'text-white font-semibold border-b-2 border-white'
-                : 'text-gray-300 hover:text-white'
-            }`}
-          >
-            코드 찾기
-          </Link>
-          <Link
-            href="/decoder"
-            className={`text-sm py-2 px-1 transition-colors hidden sm:block cursor-pointer pointer-events-auto ${
-              isActive('/decoder')
-                ? 'text-white font-semibold border-b-2 border-white'
-                : 'text-gray-300 hover:text-white'
-            }`}
-          >
-            코드 디코더
-          </Link>
-          <Link
-            href="/admin/thread-types"
-            className={`text-sm py-2 px-1 transition-colors hidden sm:block cursor-pointer pointer-events-auto ${
-              isActive('/admin/thread-types')
-                ? 'text-white font-semibold border-b-2 border-white'
-                : 'text-gray-300 hover:text-white'
-            }`}
-          >
-            코드관리
-          </Link>
+        <div className="flex items-center gap-4 pointer-events-auto">
+          <span className="text-lg font-bold text-white hidden sm:block mr-2">Product Catalog</span>
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`text-sm py-2 px-3 rounded transition-all whitespace-nowrap hidden sm:block cursor-pointer pointer-events-auto ${
+                isActive(item.href)
+                  ? 'text-white font-semibold bg-dklok-light bg-opacity-20 border-b-2 border-white'
+                  : 'text-gray-300 hover:text-white hover:bg-white hover:bg-opacity-10'
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
       </div>
     </header>
