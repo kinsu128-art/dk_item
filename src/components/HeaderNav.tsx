@@ -22,13 +22,13 @@ export default function HeaderNav() {
             priority
           />
         </Link>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 pointer-events-auto">
           <span className="text-lg font-bold text-white hidden sm:block">Product Catalog</span>
           <Link
             href="/search"
-            className={`text-sm transition-colors hidden sm:block ${
+            className={`text-sm py-2 px-1 transition-colors hidden sm:block cursor-pointer pointer-events-auto ${
               isActive('/search')
-                ? 'text-white font-semibold border-b-2 border-white pb-1'
+                ? 'text-white font-semibold border-b-2 border-white'
                 : 'text-gray-300 hover:text-white'
             }`}
           >
@@ -36,9 +36,9 @@ export default function HeaderNav() {
           </Link>
           <Link
             href="/decoder"
-            className={`text-sm transition-colors hidden sm:block ${
+            className={`text-sm py-2 px-1 transition-colors hidden sm:block cursor-pointer pointer-events-auto ${
               isActive('/decoder')
-                ? 'text-white font-semibold border-b-2 border-white pb-1'
+                ? 'text-white font-semibold border-b-2 border-white'
                 : 'text-gray-300 hover:text-white'
             }`}
           >
@@ -46,9 +46,9 @@ export default function HeaderNav() {
           </Link>
           <Link
             href="/admin/thread-types"
-            className={`text-sm transition-colors hidden sm:block ${
+            className={`text-sm py-2 px-1 transition-colors hidden sm:block cursor-pointer pointer-events-auto ${
               isActive('/admin/thread-types')
-                ? 'text-white font-semibold border-b-2 border-white pb-1'
+                ? 'text-white font-semibold border-b-2 border-white'
                 : 'text-gray-300 hover:text-white'
             }`}
           >
