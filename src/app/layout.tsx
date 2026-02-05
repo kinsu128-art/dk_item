@@ -31,6 +31,12 @@ export default function RootLayout({
             <div className="flex items-center gap-6">
               <span className="text-lg font-bold text-white hidden sm:block">Product Catalog</span>
               <Link
+                href="/search"
+                className="text-sm text-gray-300 hover:text-white transition-colors hidden sm:block"
+              >
+                코드 찾기
+              </Link>
+              <Link
                 href="/decoder"
                 className="text-sm text-gray-300 hover:text-white transition-colors hidden sm:block"
               >
