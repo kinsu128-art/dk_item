@@ -1,134 +1,89 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Product } from '@/types/product'
+import Link from 'next/link'
 
 export default function Home() {
-  const router = useRouter()
-  const [searchQuery, setSearchQuery] = useState('')
-  const [category, setCategory] = useState<string>('all')
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(false)
-  const [searched, setSearched] = useState(false)
-
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!searchQuery.trim()) return
-
-    setLoading(true)
-    setSearched(true)
-
-    try {
-      const params = new URLSearchParams({
-        q: searchQuery,
-        ...(category !== 'all' && { category }),
-      })
-
-      const res = await fetch(`/api/products?${params}`)
-      const data = await res.json()
-      setProducts(data.products || [])
-    } catch (error) {
-      console.error('Search error:', error)
-      setProducts([])
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleProductClick = (productCode: string) => {
-    router.push(`/product/${encodeURIComponent(productCode)}`)
-  }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">제품 시리즈 검색</h2>
-
-        <form onSubmit={handleSearch} className="space-y-4">
-          <div className="flex gap-4">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="제품 시리즈를 입력하세요 (예: DMC, DFC)"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dklok-light focus:border-transparent outline-none"
-            />
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-dklok-light focus:border-transparent outline-none"
-            >
-              <option value="all">전체</option>
-              <option value="Fittings">Fittings</option>
-              <option value="Valves">Valves</option>
-            </select>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-dklok-blue hover:bg-dklok-light text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50"
-          >
-            {loading ? '검색 중...' : '검색'}
-          </button>
-        </form>
+    <div>
+      {/* Hero Banner */}
+      <div className="relative w-full h-96 bg-gradient-to-r from-dklok-blue to-dklok-light rounded-lg overflow-hidden mb-12 shadow-lg">
+        <div className="absolute inset-0 bg-black opacity-30"></div>
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            DK-Lok 제품 카탈로그
+          </h1>
+          <p className="text-lg md:text-xl opacity-90 max-w-2xl">
+            고품질의 Fittings과 Valves 제품을 검색하고 관리하세요
+          </p>
+        </div>
       </div>
 
-      {searched && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            검색 결과 {products.length > 0 && `(${products.length}건)`}
-          </h3>
+      {/* Quick Menu Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        {/* 제품카탈로그 */}
+        <a
+          href="https://dklok.com/product-introduction/product-classification/all-product"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer border-t-4 border-dklok-blue group block"
+        >
+          <div className="text-4xl mb-3 text-dklok-blue group-hover:scale-110 transition-transform">
+            📦
+          </div>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">제품카탈로그</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            모든 DK-Lok 제품을 검색하고 상세 정보를 확인하세요
+          </p>
+          <div className="text-dklok-light text-sm font-medium">바로가기 →</div>
+        </a>
 
-          {products.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
-              검색 결과가 없습니다.
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {products.map((product) => (
-                <div
-                  key={product.productCode}
-                  onClick={() => handleProductClick(product.productCode)}
-                  className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-dklok-light hover:bg-gray-50 transition-all"
-                >
-                  <div className="flex justify-between items-center">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-semibold text-lg text-dklok-blue">
-                          {product.productCode}
-                        </h4>
-                        {product.endNum && product.endNum > 0 && (
-                          <span className="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded">
-                            {product.endNum} End{product.endNum > 1 ? 's' : ''}
-                          </span>
-                        )}
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                          product.category === 'Fittings'
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {product.category}
-                        </span>
-                      </div>
-                      <p className="text-gray-600 mt-1">{product.productName}</p>
-                    </div>
-                    <svg
-                      className="w-5 h-5 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+        {/* 코드찾기 */}
+        <Link
+          href="/search"
+          className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer border-t-4 border-dklok-light group block"
+        >
+          <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
+            🔍
+          </div>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">코드찾기</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            원하는 제품의 정확한 제품 코드를 찾으세요
+          </p>
+          <div className="text-dklok-light text-sm font-medium">바로가기 →</div>
+        </Link>
+
+        {/* 코드디코더 */}
+        <Link
+          href="/decoder"
+          className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer border-t-4 border-blue-500 group block"
+        >
+          <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
+            🔐
+          </div>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">코드디코더</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            제품 코드를 입력하여 상세 정보를 디코드하세요
+          </p>
+          <div className="text-dklok-light text-sm font-medium">바로가기 →</div>
+        </Link>
+
+        {/* 코드관리 */}
+        <Link
+          href="/admin/thread-types"
+          className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 cursor-pointer border-t-4 border-blue-400 group block"
+        >
+          <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
+            ⚙️
+          </div>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">코드관리</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            제품 코드 정보를 관리하고 업데이트하세요
+          </p>
+          <div className="text-dklok-light text-sm font-medium">바로가기 →</div>
+        </Link>
+      </div>
+
     </div>
   )
 }
